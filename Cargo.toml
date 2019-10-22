@@ -16,14 +16,14 @@ A crate for safe and ergonomic pin-projection.
 [workspace]
 members = [
     "pin-project-internal",
-    "tests/ui/auxiliary",
-    "tests/doc",
+    "tests/auxiliary/macros",
+    "tests/doctest",
 ]
 
 [dependencies]
 pin-project-internal = { version = "=0.4.5", path = "pin-project-internal", default-features = false }
 
 [dev-dependencies]
-auxiliary-macros = { version = "0.1", path = "tests/ui/auxiliary" }
+auxiliary-macros = { version = "0.1", path = "tests/auxiliary/macros" }
 rustversion = "1.0"
 trybuild = "1.0"

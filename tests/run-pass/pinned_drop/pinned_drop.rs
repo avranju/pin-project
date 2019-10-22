@@ -5,7 +5,6 @@
 use pin_project::{pin_project, pinned_drop};
 use std::pin::Pin;
 
-#[test]
 fn safe_project() {
     #[pin_project(PinnedDrop)]
     pub struct Foo<'a> {
@@ -26,7 +25,6 @@ fn safe_project() {
     assert!(was_dropped);
 }
 
-#[test]
 fn test_mut_argument() {
     #[pin_project(PinnedDrop)]
     struct Struct {
@@ -41,7 +39,6 @@ fn test_mut_argument() {
     }
 }
 
-#[test]
 fn test_self_in_vec() {
     #[pin_project(PinnedDrop)]
     struct Struct {
@@ -56,7 +53,6 @@ fn test_self_in_vec() {
     }
 }
 
-#[test]
 fn test_self_in_macro_containing_fn() {
     #[pin_project(PinnedDrop)]
     pub struct Struct {
@@ -82,7 +78,6 @@ fn test_self_in_macro_containing_fn() {
     }
 }
 
-#[test]
 fn test_call_self() {
     #[pin_project(PinnedDrop)]
     pub struct Struct {
@@ -112,7 +107,6 @@ fn test_call_self() {
     }
 }
 
-#[test]
 fn test_self_match() {
     #[pin_project(PinnedDrop)]
     pub struct TupleStruct(usize);
@@ -129,3 +123,5 @@ fn test_self_match() {
         }
     }
 }
+
+fn main() {}

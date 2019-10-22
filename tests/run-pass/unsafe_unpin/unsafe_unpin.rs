@@ -28,13 +28,6 @@ pub struct OverlappingLifetimeNames<'pin, T, U> {
 #[allow(unsafe_code)]
 unsafe impl<T: Unpin, U> UnsafeUnpin for OverlappingLifetimeNames<'_, T, U> {}
 
-#[test]
-fn unsafe_unpin() {
-    is_unpin::<Blah<(), PhantomPinned>>();
-    is_unpin::<OverlappingLifetimeNames<'_, (), ()>>();
-}
-
-#[test]
 fn trivial_bounds() {
     #[pin_project(UnsafeUnpin)]
     pub struct NotImplementUnsafUnpin {
@@ -43,28 +36,10 @@ fn trivial_bounds() {
     }
 }
 
-#[test]
-fn dst() {
-    #[pin_project(UnsafeUnpin)]
-    pub struct A<T: ?Sized> {
-        x: T,
-    }
+fn main() {
+    is_unpin::<Blah<(), PhantomPinned>>();
+    is_unpin::<OverlappingLifetimeNames<'_, (), ()>>();
 
-    #[pin_project(UnsafeUnpin)]
-    pub struct B<T: ?Sized> {
-        #[pin]
-        x: T,
-    }
-
-    #[pin_project(UnsafeUnpin)]
-    pub struct C<T: ?Sized>(T);
-
-    #[pin_project(UnsafeUnpin)]
-    pub struct D<T: ?Sized>(#[pin] T);
-}
-
-#[test]
-fn test() {
     let mut x = OverlappingLifetimeNames { field1: 0, field2: 1, field3: &() };
     let x = Pin::new(&mut x);
     let y = x.as_ref().project_ref();

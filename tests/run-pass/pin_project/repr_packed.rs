@@ -14,7 +14,6 @@ use std::cell::Cell;
 // try to move the field anyway during drop.
 //
 // This tests validates that the compiler is doing what we expect.
-#[test]
 fn weird_repr_packed() {
     // We keep track of the field address during
     // drop using a thread local, to avoid changing
@@ -47,4 +46,8 @@ fn weird_repr_packed() {
         field_addr
     };
     assert_eq!(field_addr, FIELD_ADDR.with(|f| f.get()));
+}
+
+fn main() {
+    weird_repr_packed();
 }

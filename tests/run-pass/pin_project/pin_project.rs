@@ -1,4 +1,3 @@
-#![no_std]
 #![warn(unsafe_code)]
 #![warn(rust_2018_idioms, single_use_lifetimes)]
 #![allow(dead_code)]
@@ -6,7 +5,6 @@
 use core::{marker::PhantomPinned, pin::Pin};
 use pin_project::{pin_project, pinned_drop, UnsafeUnpin};
 
-#[test]
 fn test_pin_project() {
     #[pin_project]
     struct Struct<T, U> {
@@ -112,7 +110,6 @@ fn test_pin_project() {
     }
 }
 
-#[test]
 fn enum_project_set() {
     #[pin_project]
     #[derive(Eq, PartialEq, Debug)]
@@ -136,7 +133,6 @@ fn enum_project_set() {
     assert_eq!(bar, Bar::Variant2(true));
 }
 
-#[test]
 fn where_clause_and_associated_type_fields() {
     #[pin_project]
     struct Struct<I>
@@ -158,7 +154,6 @@ fn where_clause_and_associated_type_fields() {
     }
 }
 
-#[test]
 fn move_out() {
     struct NotCopy;
 
@@ -181,7 +176,6 @@ fn move_out() {
     };
 }
 
-#[test]
 fn trait_bounds_on_type_generics() {
     #[pin_project]
     pub struct Struct<'a, T: ?Sized> {
@@ -207,7 +201,6 @@ fn trait_bounds_on_type_generics() {
     }
 }
 
-#[test]
 fn overlapping_lifetime_names() {
     #[pin_project]
     pub struct Foo<'pin, T> {
@@ -216,7 +209,6 @@ fn overlapping_lifetime_names() {
     }
 }
 
-#[test]
 fn combine() {
     #[pin_project(PinnedDrop, UnsafeUnpin)]
     pub struct Foo<T> {
@@ -234,7 +226,6 @@ fn combine() {
     unsafe impl<T: Unpin> UnsafeUnpin for Foo<T> {}
 }
 
-#[test]
 fn private_type_in_public_type() {
     #[pin_project]
     pub struct PublicStruct<T> {
@@ -245,7 +236,6 @@ fn private_type_in_public_type() {
     struct PrivateStruct<T>(T);
 }
 
-#[test]
 fn lifetime_project() {
     #[pin_project]
     struct Struct<T, U> {
@@ -303,7 +293,6 @@ fn lifetime_project() {
 }
 
 #[rustversion::since(1.36)]
-#[test]
 fn lifetime_project_elided() {
     #[pin_project]
     struct Struct<T, U> {
@@ -369,7 +358,6 @@ mod visibility {
     }
 }
 
-#[test]
 fn visibility() {
     let mut x = visibility::A { b: 0 };
     let x = Pin::new(&mut x);
@@ -379,7 +367,6 @@ fn visibility() {
     let _: &mut u8 = y.b;
 }
 
-#[test]
 fn trivial_bounds() {
     #[pin_project]
     pub struct NoGenerics {
@@ -388,51 +375,4 @@ fn trivial_bounds() {
     }
 }
 
-#[test]
-fn dst() {
-    #[pin_project]
-    pub struct A<T: ?Sized> {
-        x: T,
-    }
-
-    #[pin_project]
-    pub struct B<T: ?Sized> {
-        #[pin]
-        x: T,
-    }
-
-    #[pin_project]
-    pub struct C<T: ?Sized>(T);
-
-    #[pin_project]
-    pub struct D<T: ?Sized>(#[pin] T);
-}
-
-#[test]
-fn dyn_type() {
-    #[pin_project]
-    struct Struct1 {
-        a: i32,
-        f: dyn core::fmt::Debug,
-    }
-
-    #[pin_project]
-    struct Struct2 {
-        a: i32,
-        #[pin]
-        f: dyn core::fmt::Debug,
-    }
-
-    #[pin_project]
-    struct Struct3 {
-        a: i32,
-        f: dyn core::fmt::Debug + Send,
-    }
-
-    #[pin_project]
-    struct Struct4 {
-        a: i32,
-        #[pin]
-        f: dyn core::fmt::Debug + Send,
-    }
-}
+fn main() {}

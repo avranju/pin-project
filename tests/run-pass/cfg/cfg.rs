@@ -2,10 +2,8 @@
 #![warn(rust_2018_idioms, single_use_lifetimes)]
 #![allow(dead_code)]
 
-// Refs: https://doc.rust-lang.org/nightly/reference/attributes.html
-
 use pin_project::pin_project;
-use std::{marker::PhantomPinned, pin::Pin};
+use std::marker::PhantomPinned;
 
 fn is_unpin<T: Unpin>() {}
 
@@ -18,8 +16,7 @@ pub struct Other;
 // If `cfg(any())` is not working properly, `is_unpin` will fail.
 pub struct Any(PhantomPinned);
 
-#[test]
-fn cfg() {
+fn main() {
     // structs
 
     #[pin_project]
@@ -164,80 +161,4 @@ fn cfg() {
     let _x = Field::TupleVariant(Linux);
     #[cfg(not(target_os = "linux"))]
     let _x = Field::TupleVariant(Other);
-}
-
-#[test]
-fn cfg_attr() {
-    #[pin_project]
-    pub struct SameCfg {
-        #[cfg(target_os = "linux")]
-        #[cfg_attr(target_os = "linux", pin)]
-        inner: Linux,
-        #[cfg(not(target_os = "linux"))]
-        #[cfg_attr(not(target_os = "linux"), pin)]
-        inner: Other,
-        #[cfg(any())]
-        #[cfg_attr(any(), pin)]
-        any: Any,
-    }
-
-    is_unpin::<SameCfg>();
-
-    #[cfg(target_os = "linux")]
-    let mut x = SameCfg { inner: Linux };
-    #[cfg(not(target_os = "linux"))]
-    let mut x = SameCfg { inner: Other };
-
-    let x = Pin::new(&mut x).project();
-    #[cfg(target_os = "linux")]
-    let _: Pin<&mut Linux> = x.inner;
-    #[cfg(not(target_os = "linux"))]
-    let _: Pin<&mut Other> = x.inner;
-
-    #[pin_project]
-    pub struct DifferentCfg {
-        #[cfg(target_os = "linux")]
-        #[cfg_attr(target_os = "linux", pin)]
-        inner: Linux,
-        #[cfg(not(target_os = "linux"))]
-        #[cfg_attr(target_os = "linux", pin)]
-        inner: Other,
-        #[cfg(any())]
-        #[cfg_attr(any(), pin)]
-        any: Any,
-    }
-
-    is_unpin::<DifferentCfg>();
-
-    #[cfg(target_os = "linux")]
-    let mut x = DifferentCfg { inner: Linux };
-    #[cfg(not(target_os = "linux"))]
-    let mut x = DifferentCfg { inner: Other };
-
-    let x = Pin::new(&mut x).project();
-    #[cfg(target_os = "linux")]
-    let _: Pin<&mut Linux> = x.inner;
-    #[cfg(not(target_os = "linux"))]
-    let _: &mut Other = x.inner;
-
-    #[cfg_attr(not(any()), pin_project)]
-    struct Foo<T> {
-        #[cfg_attr(not(any()), pin)]
-        inner: T,
-    }
-
-    let mut x = Foo { inner: 0_u8 };
-    let x = Pin::new(&mut x).project();
-    let _: Pin<&mut u8> = x.inner;
-}
-
-#[test]
-fn cfg_attr_any_packed() {
-    // Since `cfg(any())` can never be true, it is okay for this to pass.
-    #[pin_project]
-    #[cfg_attr(any(), repr(packed))]
-    struct Struct {
-        #[pin]
-        field: u32,
-    }
 }

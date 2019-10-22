@@ -1,3 +1,6 @@
+#![warn(unsafe_code)]
+#![warn(rust_2018_idioms, single_use_lifetimes)]
+#![allow(dead_code)]
 // NB: If you change this test, change 'overlapping_marker_traits-feature-gate.rs' at the same time.
 
 // overlapping_marker_traits

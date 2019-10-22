@@ -1,3 +1,6 @@
+#![warn(unsafe_code)]
+#![warn(rust_2018_idioms, single_use_lifetimes)]
+#![allow(dead_code)]
 // NB: If you change this test, change 'stmt_expr_attributes-feature-gate.rs' at the same time.
 
 // proc_macro_hygiene

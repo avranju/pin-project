@@ -7,6 +7,7 @@ on:
       # - master
       - staging
       - trying
+      - run-pass # wip
   schedule:
     - cron: 00 01 * * 00 # Weekly
 
